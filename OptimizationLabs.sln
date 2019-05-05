@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationLab1", "OptimizationLab1\OptimizationLab1.csproj", "{1A33B6F2-9BD2-4AC1-8064-7CB498CA6536}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationLab3-GradientProjection", "OptimizationLab3-GradientProjection\OptimizationLab3-GradientProjection.csproj", "{9DE44795-235D-4436-A5AF-51D283B87A0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1A33B6F2-9BD2-4AC1-8064-7CB498CA6536}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A33B6F2-9BD2-4AC1-8064-7CB498CA6536}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A33B6F2-9BD2-4AC1-8064-7CB498CA6536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DE44795-235D-4436-A5AF-51D283B87A0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DE44795-235D-4436-A5AF-51D283B87A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DE44795-235D-4436-A5AF-51D283B87A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DE44795-235D-4436-A5AF-51D283B87A0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace OptimizationLab1
 {
-    internal class Program
+    public class Program
     {
         #region Main
 
@@ -16,9 +16,10 @@ namespace OptimizationLab1
                 [1] = 0
             };
             var eps = Math.Pow(10, -5);
-            var min = GradientDescentSplitStep(x0, eps);
-            
-            Console.WriteLine(F(min));
+            //
+            //var min = GradientDescentSplitStep(x0, eps);
+            GradientDescentGoldenRatio(x0, eps);
+            //Console.WriteLine(F(min));
             Console.ReadKey();
         }
 
@@ -29,23 +30,23 @@ namespace OptimizationLab1
             return x * x + 18 * y * y + 0.01 * x * y + x - y;
         }
 
-        public static double F1(double x, double y)
+        private static double F1(double x, double y)
         {
             return Math.Pow(x, 2) + 8 * Math.Pow(y, 2) + 5 * y - 3;
         }
 
-        private static double F(Vector<double> x)
+        public static double F(Vector<double> x)
         {
             return F(x[0], x[1]);
         }
 
 
-        private static Vector<double> GradientDescentGoldenRatio(Vector<double> x0, double eps)
+        public static Vector<double> GradientDescentGoldenRatio(Vector<double> x0, double eps)
         {
             var xCur = x0;
             Vector<double> grad = new DenseVector(2)
             {
-                [0] = Df_dx(x0[1], x0[1], eps), //using vector x0 fill the grad by-coordinate
+                [0] = Df_dx(x0[0], x0[1], eps), //using vector x0 fill the grad by-coordinate
                 [1] = Df_dy(x0[0], x0[1], eps)
             };
 
@@ -82,7 +83,7 @@ namespace OptimizationLab1
                               $"|F(xCur) - F(xNext)|: {Math.Abs(F(xCur) - F(xNext))}");
             return xNext;
         }
-        private static Vector<double> GradientDescentSplitStep(Vector<double> x0, double eps)
+        public static Vector<double> GradientDescentSplitStep(Vector<double> x0, double eps)
         {
             Vector<Double> xCur = x0;
             Vector<double> grad = new DenseVector(2)
@@ -125,17 +126,17 @@ namespace OptimizationLab1
             return xNext;
         }
 
-        private static double Df_dx(double x, double y, double h)
+        public static double Df_dx(double x, double y, double h)
         {
             return (F(x + h, y) - F(x - h, y)) / (2 * h);
         }
 
-        private static double Df_dy(double x, double y, double h)
+        public static double Df_dy(double x, double y, double h)
         {
             return (F(x, y + h) - F(x, y - h)) / (2 * h);
         }
 
-        private static double GoldenRatioAlpha(Vector<double> x, double eps, Vector<double> grad)
+        public static double GoldenRatioAlpha(Vector<double> x, double eps, Vector<double> grad)
         {
             double a = 0;
             double b = 1;
