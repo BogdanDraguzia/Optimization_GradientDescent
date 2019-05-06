@@ -30,56 +30,63 @@ namespace OptimizationLab3_GradientProjection
             var xCur = x0.GetProjectionHyperplane(HyperPlane,1);
             Vector<double> grad = new DenseVector(3)
             {
-                [0] = Df_dx(x0[0], x0[1], x0[2], eps), //using vector x0 fill the grad by-coordinate
-                [1] = Df_dy(x0[0], x0[1], x0[2], eps),
-                [2] = Df_dz(x0[0], x0[1], x0[2], eps)
+                [0] = Df_dx(xCur[0], xCur[1], xCur[2], eps ),
+                [1] = Df_dy(xCur[0], xCur[1], xCur[2], eps ),
+                [2] = Df_dz(xCur[0], xCur[1], xCur[2], eps )
             };
 
-
             //подбираем длину шага в направлении проекции
-            ////var alpha = GoldenRatioAlpha(x0, eps, grad.Normalize(2).GetProjectionHyperplane(HyperPlane,1)); //project???
+            var alpha = GoldenRatioAlpha(xCur, eps, grad.Normalize(2).GetProjectionHyperplane(HyperPlane, 1)); //project???
             //.GetProjectionHyperplane(HyperPlane, 1)
 
-            var alpha = 1 / 2;
+
 
             //(HyperPlane,a)=1
-            var xNext = (xCur - alpha*grad).GetProjectionHyperplane(HyperPlane, 1); //нормируем направление шага
-            var iteration = 1;//not normalized
+            var xNext = (xCur - alpha*grad.Normalize(2)).GetProjectionHyperplane(HyperPlane, 1); //нормируем направление шага
+            var iteration = 1;// normalized
 
 
             do
             {
                 #region Output
 
-                Console.WriteLine($"Iter {iteration++}: xCur:{xCur.ToStR()}" + $"F = {F(xCur)}" +
-                                  $"Grad:{(-grad).ToStR()} " +
-                                  $"||Grad||:{grad.L2Norm()} " +
-                                  $"||xCur-xNext||:{(xCur - xNext).L2Norm()}");
+                if (iteration<100000)
+                {
+
+
+                    Console.WriteLine($"Iter {iteration++}: xCur:{(xCur).ToStR()}" + $" F: {F(xCur)}" +
+                                      $"||Grad||:{grad.L2Norm()} " +
+                                      $"||xCur-xNext||:{(xCur - xNext).L2Norm()}");
+                }
+                else
+                {
+                    Console.WriteLine(alpha);
+                }
+
                 #endregion
 
                 if (!IsOnPlane(HyperPlane, xCur, eps))
                 {
                     throw new Exception();
-                    
                 }
+
                 xCur = xNext;
 
-                grad[0] = Df_dx(xCur[0], xCur[1], xCur[2], eps / 10);
-                grad[1] = Df_dy(xCur[0], xCur[1], xCur[2], eps / 10);
-                grad[2] = Df_dz(xCur[0], xCur[1], xCur[2], eps / 10);
+                grad[0] = Df_dx(xCur[0], xCur[1], xCur[2], eps/1000);
+                grad[1] = Df_dy(xCur[0], xCur[1], xCur[2], eps/1000);
+                grad[2] = Df_dz(xCur[0], xCur[1], xCur[2], eps/1000);
 
                 //подбираем длину шага в направлении проекции
-                ////alpha = GoldenRatioAlpha(xCur, eps / 10, grad.Normalize(2).GetProjectionHyperplane(HyperPlane, 1)); //eps/10 + нормируем направление шага
+                 alpha = GoldenRatioAlpha(xCur, eps, grad.GetProjectionHyperplane(HyperPlane, 1).Normalize(2)); //project???
                 //.GetProjectionHyperplane(HyperPlane,1)
-
-                alpha = 1 /(iteration+1);
-
-                xNext = (xCur - alpha*grad).GetProjectionHyperplane(HyperPlane, 1); //вводим нормированный градиент; ненормированный используем для условия выхода
-            }while (!((xCur - xNext).L2Norm() < eps)); //not normalized now
+                
+                xNext = (xCur - alpha*grad.GetProjectionHyperplane(HyperPlane, 1).Normalize(2))
+                    .GetProjectionHyperplane(HyperPlane, 1); //вводим нормированный градиент
+            }while (!((xCur - xNext).L2Norm() < eps)); //normalized now
             
-            Console.WriteLine($"Iter {iteration}: xCur:{xCur.ToStR()} "+
+            Console.WriteLine($"Iter {iteration}: xCur:{xNext.ToStR()} "+
                               $"||xCur-xNext||:{(xCur - xNext).L2Norm()} " +
-                              $"|F(xCur) - F(xNext)|: {Math.Abs(F(xCur) - F(xNext))}");
+                              $"F = : {F(xNext)}");
             return xNext;
         }
 
