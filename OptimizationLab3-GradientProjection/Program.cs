@@ -77,10 +77,10 @@ namespace OptimizationLab3_GradientProjection
                 grad[2] = Df_dz(xCur[0], xCur[1], xCur[2], eps/1000);
 
                 //подбираем длину шага в направлении проекции
-                 alpha = GoldenRatioAlpha(xCur, eps, grad.GetProjectionHyperplane(HyperPlane, 1).Normalize(2)); //project???
-                //.GetProjectionHyperplane(HyperPlane,1)
+                 alpha = GoldenRatioAlpha(xCur, eps, grad); //project???
+               
                 
-                xNext = (xCur - alpha*grad.GetProjectionHyperplane(HyperPlane, 1).Normalize(2))
+                xNext = (xCur - alpha*grad)
                     .GetProjectionHyperplane(HyperPlane, 1); //вводим нормированный градиент
             }while (!((xCur - xNext).L2Norm() < eps)); //normalized now
             
@@ -99,7 +99,9 @@ namespace OptimizationLab3_GradientProjection
             {
                 var alpha1 = b - (b - a) / G;
                 var alpha2 = a + (b - a) / G;
-                if (F(x - alpha1 * grad) >= F(x - alpha2 * grad))
+                if (F((x - alpha1 * grad).GetProjectionHyperplane(HyperPlane, 1)) 
+                    >= F((x - alpha2 * grad).GetProjectionHyperplane(HyperPlane, 1)))
+
                     a = alpha1;
                 else
                     b = alpha2;
